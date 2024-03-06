@@ -19,25 +19,32 @@ from solution.producer_sol import mqProducer  # pylint: disable=import-error
 
 
 def main(ticker: str, price: float, sector: str) -> None:
-    
-    # Implement Logic to Create Routing Key from the ticker and sector variable -  Step 2
-    #
-    #                       WRITE CODE HERE!!!
-    #
 
+    # Step 2: Create Routing Key from the ticker and sector variable
+    routingKey = f"stock.{sector}.{ticker}"
 
     producer = mqProducer(routing_key=routingKey,exchange_name="Tech Lab Topic Exchange")
 
-
-    # Implement Logic To Create a message variable from the variable EG. "TSLA price is now $500" - Step 3
-    #
-    #                       WRITE CODE HERE!!!
-    #
+    # Step 3: Create a message variable from the ticker and price
+    message = f"{ticker} price is now ${price}"
     
-    
-    producer.publishOrder(message)
+    # Publish the order
+    producer.publishOrder(message=message)
 
 if __name__ == "__main__":
+
+    # Step 1: Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Publish stock price updates to RabbitMQ.")
+    parser.add_argument('ticker', type=str, help='Stock ticker symbol')
+    parser.add_argument('price', type=float, help='Current stock price')
+    parser.add_argument('sector', type=str, help='Sector of the stock')
+
+    args = parser.parse_args()
+
+    # Extract variables from parsed arguments
+    ticker = args.ticker
+    price = args.price
+    sector = args.sector
 
     # Implement Logic to read the ticker, price and sector string from the command line and save them - Step 1
     #

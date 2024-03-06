@@ -23,6 +23,9 @@ def main(sector: str, queueName: str) -> None:
     #
     #                       WRITE CODE HERE!!!
     #
+    # Step 2: Create Binding Key from the sector variable
+    # Assuming we want to consume messages for all tickers within the given sector
+    bindingKey = f"stock.{sector}.*"
     
     consumer = mqConsumer(binding_key=bindingKey,exchange_name="Tech Lab Topic Exchange",queue_name=queueName)    
     consumer.startConsuming()
@@ -30,10 +33,15 @@ def main(sector: str, queueName: str) -> None:
 
 
 if __name__ == "__main__":
+    # Step 1: Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Consume stock price updates from RabbitMQ.")
+    parser.add_argument('sector', type=str, help='Sector of the stock to subscribe to')
+    parser.add_argument('queue', type=str, help='Name of the queue to consume from')
 
-    # Implement Logic to read the sector and queueName string from the command line and save them - Step 1
-    #
-    #                       WRITE CODE HERE!!!
-    #
+    args = parser.parse_args()
 
-    sys.exit(main(sector,queue))
+    # Extract variables from parsed arguments
+    sector = args.sector
+    queue = args.queue
+
+    sys.exit(main(sector, queue))
